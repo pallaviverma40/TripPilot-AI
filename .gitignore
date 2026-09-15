@@ -1,0 +1,63 @@
+# ============================================================
+# TripPilot AI — .gitignore
+# ============================================================
+
+# ---- Node / Frontend ----
+node_modules/
+dist/
+build/
+.vite/
+*.local
+
+# ---- Python / Backend ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+venv/
+env/
+.venv/
+.env/
+
+# ---- Environment Variables (NEVER commit secrets) ----
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# ---- Databases ----
+*.db
+*.sqlite3
+*.sql.bak
+
+# ---- Logs ----
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ---- OS Files ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- VS Code ----
+.vscode/settings.json
+.vscode/launch.json
+
+# ---- Testing ----
+.pytest_cache/
+htmlcov/
+.coverage
+coverage/
+
+# ---- TypeScript ----
+*.tsbuildinfo
