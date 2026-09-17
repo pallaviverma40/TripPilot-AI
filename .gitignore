@@ -17,9 +17,6 @@ __pycache__/
 .Python
 *.egg
 *.egg-info/
-dist/
-build/
-*.so
 venv/
 env/
 .venv/
@@ -42,7 +39,6 @@ frontend/.env
 logs/
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 
 # ---- OS Files ----
 .DS_Store
@@ -59,6 +55,5 @@ htmlcov/
 .coverage
 coverage/
 
-# ---- TypeScript ----
+# ---- TypeScript / Build ----
 *.tsbuildinfo
-
