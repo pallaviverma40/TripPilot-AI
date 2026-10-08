@@ -23,3 +23,4 @@ export const getAvailableModes = (city) => {
   const key = Object.keys(TRANSPORT_MAP).find(k => k.toLowerCase() === city.toLowerCase());
   return key ? TRANSPORT_MAP[key] : ['flight', 'train', 'bus'];
 };
+

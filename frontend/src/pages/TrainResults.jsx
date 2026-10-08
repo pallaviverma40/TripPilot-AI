@@ -60,8 +60,8 @@ function TrainResults() {
             <div key={train.id} className="glass p-5 rounded-xl flex flex-col gap-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-lg font-bold text-white">{train.trainName}</h3>
-                  <p className="text-sm text-slate-400">#{train.trainNumber} • {train.type}</p>
+                  <h3 className="text-lg font-bold text-white">{train.name || train.trainName}</h3>
+                  <p className="text-sm text-slate-400">#{train.trainNumber}</p>
                 </div>
                 <div className="flex items-center gap-4 text-center">
                   <div>
@@ -80,18 +80,26 @@ function TrainResults() {
               </div>
 
               <div className="flex flex-wrap gap-3 mt-2 border-t border-slate-700 pt-4">
-                {train.classes.map(c => (
-                  <div key={c.type} className="flex-1 min-w-[150px] border border-slate-700 rounded-lg p-3 hover:border-indigo-500 transition-colors bg-slate-800/50 flex flex-col justify-between">
+                {train.classes && train.classes.map(c => {
+                  const classObj = typeof c === 'string' ? {
+                    type: c,
+                    name: c,
+                    price: train.price || 1200,
+                    available: train.availableSeats || 50
+                  } : c;
+                  return (
+                  <div key={classObj.type} className="flex-1 min-w-[150px] border border-slate-600 rounded-lg p-3 hover:border-indigo-400 transition-colors bg-slate-800 flex flex-col justify-between shadow-sm">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold text-white">{c.name}</span>
-                      <span className="text-indigo-400 font-bold">₹{c.price}</span>
+                      <span className="font-semibold text-slate-100">{classObj.name}</span>
+                      <span className="text-indigo-300 font-bold text-lg">₹{classObj.price}</span>
                     </div>
-                    <div className="text-xs text-green-400 mb-3">Available: {c.available}</div>
-                    <button onClick={() => handleSelect(train, c)} className="w-full py-1.5 bg-slate-700 hover:bg-indigo-600 text-white rounded text-sm transition-colors">
+                    <div className="text-xs text-emerald-400 mb-3 font-medium">Available: {classObj.available} Seats</div>
+                    <button onClick={() => handleSelect(train, classObj)} className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-sm transition-colors font-medium shadow-sm">
                       Select
                     </button>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}
