@@ -89,3 +89,4 @@ inject('backend/app/services/hotel_service.py', hotels_py, '\\n]')
 inject('frontend/src/data/hotels.js', hotels_js, '\\n];')
 inject('backend/app/services/activity_service.py', activities_py, '\\n]')
 inject('frontend/src/data/activities.js', activities_js, '\\n];')
+

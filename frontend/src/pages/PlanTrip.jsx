@@ -202,6 +202,7 @@ function PlanTrip() {
           <option value="Agra" />
           <option value="Shimla" />
           <option value="Manali" />
+          <option value="Firozabad" />
         </datalist>
       </form>
     </div>
