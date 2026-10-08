@@ -3,6 +3,53 @@ import { useNavigate } from 'react-router-dom';
 import { useTripContext } from '../context/TripContext';
 import { Plane, Train, Bus, MapPin, Search } from 'lucide-react';
 
+const CITIES = [
+  "Lucknow", "Delhi", "Mumbai", "Goa", "Bangalore", "Kolkata", "Chennai",
+  "Jaipur", "Hyderabad", "Pune", "Ahmedabad", "Kochi", "Varanasi", "Amritsar",
+  "Chandigarh", "Srinagar", "Leh", "Dehradun", "Haridwar", "Rishikesh",
+  "Udaipur", "Jodhpur", "Jaisalmer", "Patna", "Bhubaneswar", "Visakhapatnam",
+  "Coimbatore", "Madurai", "Thiruvananthapuram", "Indore", "Bhopal", "Nagpur",
+  "Raipur", "Ranchi", "Guwahati", "Port Blair", "Agra", "Shimla", "Manali", "Firozabad"
+];
+
+const AutocompleteInput = ({ label, value, onChange, placeholder, icon: Icon, error }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const filteredCities = CITIES.filter(c => c.toLowerCase().includes(value.toLowerCase()));
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-slate-300 mb-2">{label}</label>
+      <div className="relative">
+        <Icon className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
+        <input 
+          type="text" 
+          value={value}
+          onChange={e => { onChange(e.target.value); setIsOpen(true); }}
+          onFocus={() => setIsOpen(true)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+          placeholder={placeholder}
+          className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none"
+        />
+        {isOpen && filteredCities.length > 0 && (
+          <ul className="absolute z-10 w-full mt-2 max-h-60 overflow-y-auto bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-xl shadow-black/50 text-slate-200 scrollbar-thin">
+            {filteredCities.map(city => (
+              <li 
+                key={city}
+                onMouseDown={(e) => { e.preventDefault(); onChange(city); setIsOpen(false); }}
+                className="px-4 py-2 hover:bg-slate-700 hover:text-white cursor-pointer transition-colors"
+              >
+                {city}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
+    </div>
+  );
+};
+
 function PlanTrip() {
   const navigate = useNavigate();
   const { searchParams, setSearchParams } = useTripContext();
@@ -48,36 +95,22 @@ function PlanTrip() {
         
         {/* Source & Destination */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">From</label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
-              <input 
-                type="text" 
-                list="cities"
-                value={localParams.source}
-                onChange={e => setLocalParams({...localParams, source: e.target.value})}
-                placeholder="e.g. Lucknow"
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-            {errors.source && <p className="text-red-400 text-xs mt-1">{errors.source}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">To</label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
-              <input 
-                type="text" 
-                list="cities"
-                value={localParams.destination}
-                onChange={e => setLocalParams({...localParams, destination: e.target.value})}
-                placeholder="e.g. Delhi"
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-            {errors.destination && <p className="text-red-400 text-xs mt-1">{errors.destination}</p>}
-          </div>
+          <AutocompleteInput
+            label="From"
+            value={localParams.source}
+            onChange={(val) => setLocalParams({...localParams, source: val})}
+            placeholder="e.g. Lucknow"
+            icon={MapPin}
+            error={errors.source}
+          />
+          <AutocompleteInput
+            label="To"
+            value={localParams.destination}
+            onChange={(val) => setLocalParams({...localParams, destination: val})}
+            placeholder="e.g. Delhi"
+            icon={MapPin}
+            error={errors.destination}
+          />
         </div>
 
         {/* Trip Type & Dates */}
@@ -161,49 +194,6 @@ function PlanTrip() {
         <button type="submit" className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg flex justify-center items-center gap-2 transition-colors">
           <Search className="w-5 h-5" /> Search Trip
         </button>
-
-        <datalist id="cities">
-          <option value="Lucknow" />
-          <option value="Delhi" />
-          <option value="Mumbai" />
-          <option value="Goa" />
-          <option value="Bangalore" />
-          <option value="Kolkata" />
-          <option value="Chennai" />
-          <option value="Jaipur" />
-          <option value="Hyderabad" />
-          <option value="Pune" />
-          <option value="Ahmedabad" />
-          <option value="Kochi" />
-          <option value="Varanasi" />
-          <option value="Amritsar" />
-          <option value="Chandigarh" />
-          <option value="Srinagar" />
-          <option value="Leh" />
-          <option value="Dehradun" />
-          <option value="Haridwar" />
-          <option value="Rishikesh" />
-          <option value="Udaipur" />
-          <option value="Jodhpur" />
-          <option value="Jaisalmer" />
-          <option value="Patna" />
-          <option value="Bhubaneswar" />
-          <option value="Visakhapatnam" />
-          <option value="Coimbatore" />
-          <option value="Madurai" />
-          <option value="Thiruvananthapuram" />
-          <option value="Indore" />
-          <option value="Bhopal" />
-          <option value="Nagpur" />
-          <option value="Raipur" />
-          <option value="Ranchi" />
-          <option value="Guwahati" />
-          <option value="Port Blair" />
-          <option value="Agra" />
-          <option value="Shimla" />
-          <option value="Manali" />
-          <option value="Firozabad" />
-        </datalist>
       </form>
     </div>
   );

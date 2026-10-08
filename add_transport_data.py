@@ -57,3 +57,4 @@ with open('frontend/src/data/buses.js', 'w', encoding='utf-8') as f:
     f.write(buses_js_content)
 
 print("Generated new train and bus mock data.")
+
