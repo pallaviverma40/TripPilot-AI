@@ -28,7 +28,7 @@ function App() {
           <Route path="itinerary" element={<Itinerary />} />
           <Route path="confirmation" element={<BookingConfirmation />} />
           <Route path="my-trips" element={<MyTrips />} />
-          <Route path="agent-monitor" element={<AgentMonitor />} />
+          <Route path="agents" element={<AgentMonitor />} />
         </Route>
       </Routes>
     </BrowserRouter>
