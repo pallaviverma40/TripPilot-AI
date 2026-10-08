@@ -52,6 +52,11 @@ function BusResults() {
                 <h3 className="font-bold text-white text-lg">{bus.operator}</h3>
                 <p className="text-sm text-slate-400 mb-2">{bus.busType}</p>
                 <div className="flex items-center gap-1 text-xs bg-slate-800 w-fit px-2 py-1 rounded text-yellow-400"><Star className="w-3 h-3 fill-current"/> {bus.rating || "4.5"}</div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {bus.amenities && bus.amenities.map(am => (
+                    <span key={am} className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-1 rounded border border-slate-600/50">{am}</span>
+                  ))}
+                </div>
               </div>
               
               <div className="flex justify-between items-center w-full md:w-1/3 text-center">

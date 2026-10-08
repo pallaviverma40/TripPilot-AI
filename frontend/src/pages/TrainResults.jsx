@@ -60,8 +60,16 @@ function TrainResults() {
             <div key={train.id} className="glass p-5 rounded-xl flex flex-col gap-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-lg font-bold text-white">{train.name || train.trainName}</h3>
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    {train.name || train.trainName}
+                    <span className="text-[10px] bg-indigo-900/40 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/30 whitespace-nowrap">Indian Railways</span>
+                  </h3>
                   <p className="text-sm text-slate-400">#{train.trainNumber}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {train.amenities && train.amenities.map(am => (
+                      <span key={am} className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-1 rounded border border-slate-600/50">{am}</span>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex items-center gap-4 text-center">
                   <div>
