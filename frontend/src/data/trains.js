@@ -22,5 +22,13 @@ export const trains = [
 ];
 
 export const searchTrains = (source, destination, date, passengers) => {
-  return trains.filter(t => (!source || t.source.toLowerCase() === source.toLowerCase()) && (!destination || t.destination.toLowerCase() === destination.toLowerCase()));
+  const res = trains.filter(t => (!source || t.source.toLowerCase() === source.toLowerCase()) && (!destination || t.destination.toLowerCase() === destination.toLowerCase()));
+  if (res.length === 0 && source && destination) {
+    res.push({
+      id: 'TRN-FALLBACK', name: 'TripPilot Express', trainNumber: '19900',
+      source, destination, departure: '08:00', arrival: '18:00', duration: '10h 00m',
+      price: 1200, classes: ['1AC', '2AC', '3AC', 'Sleeper'], availableSeats: 100
+    });
+  }
+  return res;
 };

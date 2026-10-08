@@ -27,4 +27,10 @@ def search_buses(source: str, destination: str, date: str, passengers: int):
     for b in MOCK_BUSES:
         if source.lower() in b["source"].lower() and destination.lower() in b["destination"].lower():
             results.append(b)
+    if not results and source and destination:
+        results.append({
+            "id": "BUS-FALLBACK", "operator": "TripPilot Connect", "bus_type": "Volvo A/C Semi Sleeper",
+            "source": source, "destination": destination, "departure": "22:00", "arrival": "06:00",
+            "duration": "8h 00m", "price": 800, "available_seats": 40, "is_demo": True
+        })
     return results

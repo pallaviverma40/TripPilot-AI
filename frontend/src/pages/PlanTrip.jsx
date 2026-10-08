@@ -1,16 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTripContext } from '../context/TripContext';
 import { Plane, Train, Bus, MapPin, Search } from 'lucide-react';
-
-const CITIES = [
-  "Lucknow", "Delhi", "Mumbai", "Goa", "Bangalore", "Kolkata", "Chennai",
-  "Jaipur", "Hyderabad", "Pune", "Ahmedabad", "Kochi", "Varanasi", "Amritsar",
-  "Chandigarh", "Srinagar", "Leh", "Dehradun", "Haridwar", "Rishikesh",
-  "Udaipur", "Jodhpur", "Jaisalmer", "Patna", "Bhubaneswar", "Visakhapatnam",
-  "Coimbatore", "Madurai", "Thiruvananthapuram", "Indore", "Bhopal", "Nagpur",
-  "Raipur", "Ranchi", "Guwahati", "Port Blair", "Agra", "Shimla", "Manali", "Firozabad"
-];
+import { CITIES, getAvailableModes } from '../data/transportMap';
 
 const AutocompleteInput = ({ label, value, onChange, placeholder, icon: Icon, error }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +58,17 @@ function PlanTrip() {
     setErrors(err);
     return Object.keys(err).length === 0;
   };
+
+  const allowedModes = getAvailableModes(localParams.destination);
+
+  useEffect(() => {
+    if (localParams.destination) {
+      setLocalParams(prev => ({
+        ...prev,
+        transportModes: prev.transportModes.filter(m => allowedModes.includes(m))
+      }));
+    }
+  }, [localParams.destination]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -178,13 +181,28 @@ function PlanTrip() {
         <div>
           <label className="block text-sm font-medium text-slate-300 mb-3">Transport Preferences</label>
           <div className="flex gap-4">
-            <button type="button" onClick={() => handleTransportToggle('flight')} className={`flex items-center gap-2 px-4 py-2 rounded-full border ${localParams.transportModes.includes('flight') ? 'border-indigo-500 bg-indigo-500/20 text-indigo-400' : 'border-slate-700 bg-slate-900 text-slate-400'}`}>
+            <button 
+              type="button" 
+              disabled={!allowedModes.includes('flight')}
+              onClick={() => handleTransportToggle('flight')} 
+              className={`flex items-center gap-2 px-4 py-2 rounded-full border ${!allowedModes.includes('flight') ? 'opacity-40 cursor-not-allowed border-slate-700 bg-slate-900 text-slate-500' : localParams.transportModes.includes('flight') ? 'border-indigo-500 bg-indigo-500/20 text-indigo-400' : 'border-slate-700 bg-slate-900 text-slate-400'}`}
+            >
               <Plane className="w-4 h-4" /> Flight
             </button>
-            <button type="button" onClick={() => handleTransportToggle('train')} className={`flex items-center gap-2 px-4 py-2 rounded-full border ${localParams.transportModes.includes('train') ? 'border-indigo-500 bg-indigo-500/20 text-indigo-400' : 'border-slate-700 bg-slate-900 text-slate-400'}`}>
+            <button 
+              type="button" 
+              disabled={!allowedModes.includes('train')}
+              onClick={() => handleTransportToggle('train')} 
+              className={`flex items-center gap-2 px-4 py-2 rounded-full border ${!allowedModes.includes('train') ? 'opacity-40 cursor-not-allowed border-slate-700 bg-slate-900 text-slate-500' : localParams.transportModes.includes('train') ? 'border-indigo-500 bg-indigo-500/20 text-indigo-400' : 'border-slate-700 bg-slate-900 text-slate-400'}`}
+            >
               <Train className="w-4 h-4" /> Train
             </button>
-            <button type="button" onClick={() => handleTransportToggle('bus')} className={`flex items-center gap-2 px-4 py-2 rounded-full border ${localParams.transportModes.includes('bus') ? 'border-indigo-500 bg-indigo-500/20 text-indigo-400' : 'border-slate-700 bg-slate-900 text-slate-400'}`}>
+            <button 
+              type="button" 
+              disabled={!allowedModes.includes('bus')}
+              onClick={() => handleTransportToggle('bus')} 
+              className={`flex items-center gap-2 px-4 py-2 rounded-full border ${!allowedModes.includes('bus') ? 'opacity-40 cursor-not-allowed border-slate-700 bg-slate-900 text-slate-500' : localParams.transportModes.includes('bus') ? 'border-indigo-500 bg-indigo-500/20 text-indigo-400' : 'border-slate-700 bg-slate-900 text-slate-400'}`}
+            >
               <Bus className="w-4 h-4" /> Bus
             </button>
           </div>

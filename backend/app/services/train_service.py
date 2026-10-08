@@ -27,4 +27,11 @@ def search_trains(source: str, destination: str, date: str, passengers: int):
     for t in MOCK_TRAINS:
         if source.lower() in t["source"].lower() and destination.lower() in t["destination"].lower():
             results.append(t)
+    if not results and source and destination:
+        results.append({
+            "id": "TRN-FALLBACK", "name": "TripPilot Express", "train_number": "19900",
+            "source": source, "source_code": source[:3].upper(), "destination": destination, "destination_code": destination[:3].upper(),
+            "departure": "08:00", "arrival": "18:00", "duration": "10h 00m", "price": 1200,
+            "classes": ["1AC", "2AC", "3AC", "Sleeper"], "available_seats": 100, "is_demo": True
+        })
     return results

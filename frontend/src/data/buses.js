@@ -22,5 +22,13 @@ export const buses = [
 ];
 
 export const searchBuses = (source, destination, date, passengers) => {
-  return buses.filter(b => (!source || b.source.toLowerCase() === source.toLowerCase()) && (!destination || b.destination.toLowerCase() === destination.toLowerCase()));
+  const res = buses.filter(b => (!source || b.source.toLowerCase() === source.toLowerCase()) && (!destination || b.destination.toLowerCase() === destination.toLowerCase()));
+  if (res.length === 0 && source && destination) {
+    res.push({
+      id: 'BUS-FALLBACK', operator: 'TripPilot Connect', busType: 'Volvo A/C Semi Sleeper',
+      source, destination, departure: '22:00', arrival: '06:00', duration: '8h 00m',
+      price: 800, availableSeats: 40
+    });
+  }
+  return res;
 };

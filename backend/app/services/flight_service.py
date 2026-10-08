@@ -72,6 +72,14 @@ def search_flights(source: str, destination: str, date: str, passengers: int) ->
             f["is_demo"] = True
             results.append(f)
 
+    if not results and source and destination:
+        results.append({
+            "id": "FL-FALLBACK", "airline": "TripPilot Regional", "flight_number": "TP-101",
+            "source": source, "source_code": source[:3].upper(), "destination": destination, "destination_code": destination[:3].upper(),
+            "departure": "10:00", "arrival": "12:00", "duration": "2h 00m", "price": 4500, "stops": 0,
+            "aircraft": "Airbus A320", "baggage": "15kg", "meal": False, "available_seats": 50, "class": "Economy",
+            "total_price": 4500 * passengers, "passengers": passengers, "travel_date": date, "is_demo": True
+        })
     return results
 
 
