@@ -99,7 +99,8 @@ export const activityService = {
 export const tripService = {
   getAll: async () => {
     try {
-      return await api.get('/api/trips');
+      const res = await api.get('/api/trips');
+      return res.trips || [];
     } catch (e) {
       await delay(500);
       return [];
