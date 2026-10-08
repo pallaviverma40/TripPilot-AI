@@ -64,3 +64,4 @@ with open('backend/app/services/bus_service.py', 'w', encoding='utf-8') as f: f.
 with open('frontend/src/data/buses.js', 'w', encoding='utf-8') as f: f.write(buses_js_content)
 
 print("Enriched transport data applied successfully.")
+
