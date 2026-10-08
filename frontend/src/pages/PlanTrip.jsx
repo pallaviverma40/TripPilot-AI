@@ -54,6 +54,7 @@ function PlanTrip() {
               <MapPin className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
               <input 
                 type="text" 
+                list="cities"
                 value={localParams.source}
                 onChange={e => setLocalParams({...localParams, source: e.target.value})}
                 placeholder="e.g. Lucknow"
@@ -68,6 +69,7 @@ function PlanTrip() {
               <MapPin className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
               <input 
                 type="text" 
+                list="cities"
                 value={localParams.destination}
                 onChange={e => setLocalParams({...localParams, destination: e.target.value})}
                 placeholder="e.g. Delhi"
@@ -159,6 +161,48 @@ function PlanTrip() {
         <button type="submit" className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg flex justify-center items-center gap-2 transition-colors">
           <Search className="w-5 h-5" /> Search Trip
         </button>
+
+        <datalist id="cities">
+          <option value="Lucknow" />
+          <option value="Delhi" />
+          <option value="Mumbai" />
+          <option value="Goa" />
+          <option value="Bangalore" />
+          <option value="Kolkata" />
+          <option value="Chennai" />
+          <option value="Jaipur" />
+          <option value="Hyderabad" />
+          <option value="Pune" />
+          <option value="Ahmedabad" />
+          <option value="Kochi" />
+          <option value="Varanasi" />
+          <option value="Amritsar" />
+          <option value="Chandigarh" />
+          <option value="Srinagar" />
+          <option value="Leh" />
+          <option value="Dehradun" />
+          <option value="Haridwar" />
+          <option value="Rishikesh" />
+          <option value="Udaipur" />
+          <option value="Jodhpur" />
+          <option value="Jaisalmer" />
+          <option value="Patna" />
+          <option value="Bhubaneswar" />
+          <option value="Visakhapatnam" />
+          <option value="Coimbatore" />
+          <option value="Madurai" />
+          <option value="Thiruvananthapuram" />
+          <option value="Indore" />
+          <option value="Bhopal" />
+          <option value="Nagpur" />
+          <option value="Raipur" />
+          <option value="Ranchi" />
+          <option value="Guwahati" />
+          <option value="Port Blair" />
+          <option value="Agra" />
+          <option value="Shimla" />
+          <option value="Manali" />
+        </datalist>
       </form>
     </div>
   );
