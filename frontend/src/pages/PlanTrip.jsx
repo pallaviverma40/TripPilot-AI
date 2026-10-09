@@ -74,10 +74,7 @@ function PlanTrip() {
     e.preventDefault();
     if (validate()) {
       setSearchParams(localParams);
-      if (localParams.transportModes.includes('flight')) navigate('/flights');
-      else if (localParams.transportModes.includes('train')) navigate('/trains');
-      else if (localParams.transportModes.includes('bus')) navigate('/buses');
-      else navigate('/hotels'); // fallback
+      navigate('/transport');
     }
   };
 

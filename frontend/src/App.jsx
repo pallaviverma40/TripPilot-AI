@@ -3,9 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import PlanTrip from './pages/PlanTrip';
-import FlightResults from './pages/FlightResults';
-import TrainResults from './pages/TrainResults';
-import BusResults from './pages/BusResults';
+import TransportResults from './pages/TransportResults';
 import HotelResults from './pages/HotelResults';
 import Activities from './pages/Activities';
 import Itinerary from './pages/Itinerary';
@@ -20,9 +18,10 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="plan" element={<PlanTrip />} />
-          <Route path="flights" element={<FlightResults />} />
-          <Route path="trains" element={<TrainResults />} />
-          <Route path="buses" element={<BusResults />} />
+          <Route path="transport" element={<TransportResults />} />
+          <Route path="flights" element={<TransportResults />} />
+          <Route path="trains" element={<TransportResults />} />
+          <Route path="buses" element={<TransportResults />} />
           <Route path="hotels" element={<HotelResults />} />
           <Route path="activities" element={<Activities />} />
           <Route path="itinerary" element={<Itinerary />} />
