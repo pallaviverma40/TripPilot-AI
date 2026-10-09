@@ -13,11 +13,34 @@ function Itinerary() {
   }, [selectedFlight, selectedTrain, selectedBus, selectedHotel, selectedActivities]);
 
   const handleBook = async () => {
-    // In a real app we would call services for each booking. Here we create a master trip.
-    const tripData = { searchParams, transport: { mode: selectedTransportMode, flight: selectedFlight, train: selectedTrain, bus: selectedBus }, hotel: selectedHotel, activities: selectedActivities, budget: budgetBreakdown };
+    const totalCost = (budgetBreakdown.transport || 0) + 
+      (budgetBreakdown.hotel || 0) + 
+      (budgetBreakdown.activities || 0) + 
+      (budgetBreakdown.food || 0) + 
+      (budgetBreakdown.misc || 0);
+
+    const tripData = {
+      source: searchParams.source || '',
+      destination: searchParams.destination || '',
+      departure_date: searchParams.departureDate || '',
+      return_date: searchParams.returnDate || null,
+      passengers: Number(searchParams.passengers) || 1,
+      budget: Number(searchParams.budget) || 0,
+      transport_mode: selectedTransportMode || (selectedFlight ? 'flight' : selectedTrain ? 'train' : selectedBus ? 'bus' : 'flight'),
+      transport_details: selectedFlight || selectedTrain || selectedBus || null,
+      hotel_details: selectedHotel || null,
+      activities: selectedActivities || [],
+      total_cost: totalCost,
+      status: 'confirmed',
+      searchParams: searchParams,
+      transport: { mode: selectedTransportMode, flight: selectedFlight, train: selectedTrain, bus: selectedBus },
+      hotel: selectedHotel,
+      budgetBreakdown: budgetBreakdown
+    };
+
     const res = await tripService.create(tripData);
-    if(res.success) {
-      setCurrentTrip({ ...tripData, id: res.tripId });
+    if (res.success) {
+      setCurrentTrip({ ...tripData, id: res.tripId || res.trip_id });
       navigate('/confirmation');
     }
   };

@@ -138,59 +138,165 @@ export const activityService = {
 };
 
 // ── Trips ─────────────────────────────────────────────────────
+export const normalizeTrip = (rawTrip) => {
+  if (!rawTrip || typeof rawTrip !== 'object') return null;
+
+  const source = rawTrip.source || rawTrip.origin || rawTrip.searchParams?.source || '';
+  const destination = rawTrip.destination || rawTrip.dest || rawTrip.searchParams?.destination || '';
+
+  // Filter out truly corrupt/empty objects
+  if (!destination && !source) return null;
+  if (destination === 'Unknown' && (!source || source === '—')) return null;
+
+  const departure_date = rawTrip.departure_date || rawTrip.departureDate || rawTrip.travelDate || rawTrip.travel_date || rawTrip.date || rawTrip.searchParams?.departureDate || '';
+  const return_date = rawTrip.return_date || rawTrip.returnDate || rawTrip.searchParams?.returnDate || null;
+  const passengers = Number(rawTrip.passengers || rawTrip.searchParams?.passengers) || 1;
+  const budget = Number(rawTrip.budget || rawTrip.searchParams?.budget) || 0;
+  const transport_mode = rawTrip.transport_mode || rawTrip.transportMode || rawTrip.transport?.mode || 'flight';
+  
+  let total_cost = Number(rawTrip.total_cost || rawTrip.totalPrice);
+  if (!total_cost && rawTrip.budgetBreakdown) {
+    const bb = rawTrip.budgetBreakdown;
+    total_cost = (bb.transport || 0) + (bb.hotel || 0) + (bb.activities || 0) + (bb.food || 0) + (bb.misc || 0);
+  }
+  if (!total_cost && rawTrip.budget?.total) {
+    total_cost = Number(rawTrip.budget.total);
+  }
+  if (!total_cost) total_cost = 0;
+
+  return {
+    ...rawTrip,
+    id: String(rawTrip.id || rawTrip._id || rawTrip.tripId || ('TRP' + Date.now())),
+    source: source || 'Departure City',
+    destination: destination || 'Destination City',
+    departure_date: departure_date || 'Upcoming',
+    return_date,
+    passengers,
+    budget,
+    transport_mode,
+    transport_details: rawTrip.transport_details || rawTrip.transport?.flight || rawTrip.transport?.train || rawTrip.transport?.bus || null,
+    hotel_details: rawTrip.hotel_details || rawTrip.hotel || null,
+    activities: Array.isArray(rawTrip.activities) ? rawTrip.activities : [],
+    total_cost,
+    created_at: rawTrip.created_at || new Date().toISOString(),
+    is_demo: true,
+  };
+};
+
 export const tripService = {
   getAll: async () => {
+    let localTrips = [];
+    try {
+      // 1. Clean and normalize localStorage demo trips
+      const stored = localStorage.getItem('trippilot_demo_trips');
+      const legacyStored = localStorage.getItem('trips'); // legacy key cleanup
+      let rawList = [];
+      if (stored) {
+        try { rawList = JSON.parse(stored); } catch { rawList = []; }
+      }
+      if (legacyStored) {
+        try {
+          const parsedLegacy = JSON.parse(legacyStored);
+          if (Array.isArray(parsedLegacy)) rawList = [...rawList, ...parsedLegacy];
+        } catch { /* ignore */ }
+        localStorage.removeItem('trips'); // remove deprecated key
+      }
+
+      if (Array.isArray(rawList)) {
+        localTrips = rawList.map(normalizeTrip).filter(Boolean);
+        // Persist cleaned list
+        localStorage.setItem('trippilot_demo_trips', JSON.stringify(localTrips));
+      }
+    } catch {
+      localTrips = [];
+    }
+
     try {
       const res = await api.get('/api/trips');
-      // Backend returns { success, trips: [...] } — extract the array
-      if (Array.isArray(res)) return res;
-      if (res && Array.isArray(res.trips)) return res.trips;
-      return [];
+      let apiTrips = [];
+      if (Array.isArray(res)) apiTrips = res;
+      else if (res && Array.isArray(res.trips)) apiTrips = res.trips;
+
+      const normalizedApi = apiTrips.map(normalizeTrip).filter(Boolean);
+      
+      // Combine API trips and Local trips by ID
+      const map = new Map();
+      [...normalizedApi, ...localTrips].forEach(t => {
+        if (t && t.id) map.set(t.id, t);
+      });
+
+      return Array.from(map.values());
     } catch {
-      // Backend not running — return demo trips from localStorage
-      try {
-        const stored = localStorage.getItem('trippilot_demo_trips');
-        return stored ? JSON.parse(stored) : [];
-      } catch {
-        return [];
-      }
+      return localTrips;
     }
   },
+
   create: async (tripData) => {
-    // Always save to localStorage for demo mode
+    const normalized = normalizeTrip(tripData) || {
+      id: 'TRP' + Date.now(),
+      source: tripData.source || 'Origin',
+      destination: tripData.destination || 'Destination',
+      departure_date: tripData.departure_date || 'Upcoming',
+      passengers: 1,
+      transport_mode: 'flight',
+      total_cost: 0,
+      created_at: new Date().toISOString(),
+      is_demo: true
+    };
+
+    // Save to localStorage immediately
     try {
       const stored = localStorage.getItem('trippilot_demo_trips');
-      const existing = stored ? JSON.parse(stored) : [];
-      const newTrip = {
-        ...tripData,
-        id: 'TRP' + Date.now(),
-        created_at: new Date().toISOString(),
-        is_demo: true,
-      };
-      localStorage.setItem('trippilot_demo_trips', JSON.stringify([newTrip, ...existing]));
-
-      // Also try the backend
-      try {
-        return await api.post('/api/trips', tripData);
-      } catch {
-        return { success: true, tripId: newTrip.id, isDemo: true };
+      let existing = [];
+      if (stored) {
+        try { existing = JSON.parse(stored); } catch { existing = []; }
       }
+      const cleaned = existing.map(normalizeTrip).filter(Boolean);
+      const updated = [normalized, ...cleaned.filter(t => t.id !== normalized.id)];
+      localStorage.setItem('trippilot_demo_trips', JSON.stringify(updated));
+    } catch { /* ignore */ }
+
+    // Try backend persistence
+    try {
+      const res = await api.post('/api/trips', {
+        source: normalized.source,
+        destination: normalized.destination,
+        departure_date: normalized.departure_date,
+        return_date: normalized.return_date,
+        passengers: normalized.passengers,
+        budget: normalized.budget,
+        transport_mode: normalized.transport_mode,
+        transport_details: normalized.transport_details,
+        hotel_details: normalized.hotel_details,
+        activities: normalized.activities,
+        total_cost: normalized.total_cost,
+        status: 'confirmed',
+        is_demo: true
+      });
+      return { success: true, tripId: res.trip_id || normalized.id, isDemo: true };
     } catch {
-      return { success: true, tripId: 'TRP' + Date.now(), isDemo: true };
+      return { success: true, tripId: normalized.id, isDemo: true };
     }
   },
+
   delete: async (id) => {
     try {
       const stored = localStorage.getItem('trippilot_demo_trips');
-      const existing = stored ? JSON.parse(stored) : [];
-      const updated = existing.filter(t => t.id !== id);
+      let existing = [];
+      if (stored) {
+        try { existing = JSON.parse(stored); } catch { existing = []; }
+      }
+      const updated = existing.filter(t => String(t.id) !== String(id) && String(t._id) !== String(id));
       localStorage.setItem('trippilot_demo_trips', JSON.stringify(updated));
     } catch { /* ignore */ }
+
     try {
       await api.delete(`/api/trips/${id}`);
     } catch { /* backend optional */ }
+
     return { success: true };
   },
+
   update: async (id, tripData) => {
     await delay(300);
     return { success: true };

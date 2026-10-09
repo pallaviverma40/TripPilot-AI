@@ -35,11 +35,15 @@ function BookingConfirmation() {
         <div className="grid grid-cols-2 gap-6 mb-6">
           <div>
             <div className="flex items-center gap-2 text-slate-300 mb-1"><MapPin className="w-4 h-4"/> Route</div>
-            <div className="text-lg font-bold text-white">{currentTrip.searchParams.source} to {currentTrip.searchParams.destination}</div>
+            <div className="text-lg font-bold text-white">
+              {currentTrip.source || currentTrip.searchParams?.source || 'Origin'} to {currentTrip.destination || currentTrip.searchParams?.destination || 'Destination'}
+            </div>
           </div>
           <div>
              <div className="flex items-center gap-2 text-slate-300 mb-1"><Calendar className="w-4 h-4"/> Dates</div>
-             <div className="text-lg font-bold text-white">{currentTrip.searchParams.departureDate}</div>
+             <div className="text-lg font-bold text-white">
+               {currentTrip.departure_date || currentTrip.departureDate || currentTrip.searchParams?.departureDate || 'Upcoming'}
+             </div>
           </div>
         </div>
       </div>
