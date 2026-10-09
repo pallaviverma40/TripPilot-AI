@@ -51,11 +51,87 @@ MOCK_BUSES = [
     {"id": "BUS050", "operator": "IntrCity SmartBus", "bus_type": "A/C Sleeper", "source": "Pune", "destination": "Firozabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 523, "available_seats": 7, "amenities": ["Blanket", "Charging Point", "Reading Light"], "rating": 4.2}
 ]
 
-def search_buses(source: str, destination: str, date: str, passengers: int):
+# Pricing for seat types within each bus category
+_BUS_SEAT_TYPES = {
+    # Sleeper buses
+    "sleeper": [
+        {"type": "Lower Berth", "price_factor": 1.15, "available": 12},
+        {"type": "Upper Berth", "price_factor": 1.00, "available": 18},
+        {"type": "Single Sleeper", "price_factor": 1.35, "available": 4},
+    ],
+    # Seater buses
+    "seater": [
+        {"type": "Window Seat",  "price_factor": 1.10, "available": 10},
+        {"type": "Aisle Seat",   "price_factor": 1.00, "available": 20},
+        {"type": "Front Row",    "price_factor": 1.20, "available": 4},
+    ],
+    # Volvo multi-axle / mixed seater-sleeper
+    "mixed": [
+        {"type": "Seater",       "price_factor": 0.85, "available": 14},
+        {"type": "Semi-Sleeper", "price_factor": 1.00, "available": 12},
+        {"type": "Full Sleeper", "price_factor": 1.30, "available": 6},
+    ],
+}
+
+def _get_seat_category(bus_type: str) -> str:
+    bt = bus_type.lower()
+    if "seater/sleeper" in bt or "semi" in bt or "multi-axle" in bt:
+        return "mixed"
+    if "sleeper" in bt:
+        return "sleeper"
+    return "seater"
+
+def _build_seat_types(bus: dict) -> list:
+    category = _get_seat_category(bus["bus_type"])
+    base = bus["price"]
+    result = []
+    for st in _BUS_SEAT_TYPES[category]:
+        result.append({
+            "type": st["type"],
+            "price": round(base * st["price_factor"]),
+            "available": min(st["available"], bus.get("available_seats", 20)),
+        })
+    return result
+
+
+def search_buses(source: str, destination: str, date: str, passengers: int) -> list:
+    """Search buses with case-insensitive partial matching. Returns seat-type pricing."""
+    src = source.lower().strip()
+    dst = destination.lower().strip()
     results = []
     for b in MOCK_BUSES:
-        if source.lower() in b["source"].lower() and destination.lower() in b["destination"].lower():
-            results.append(b)
+        src_match = src in b["source"].lower() or b["source"].lower() in src
+        dst_match = dst in b["destination"].lower() or b["destination"].lower() in dst
+        if src_match and dst_match:
+            record = dict(b)
+            record["seat_types"] = _build_seat_types(b)
+            record["passengers"] = passengers
+            record["travel_date"] = date
+            record["is_demo"] = True
+            results.append(record)
+
     if not results and source and destination:
-        results.append({"id": "BUS-FALLBACK", "operator": "TripPilot Connect", "bus_type": "Volvo A/C Semi Sleeper", "source": source, "destination": destination, "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 800, "available_seats": 40, "amenities": ["WiFi", "Water Bottle"], "rating": 4.5, "is_demo": True})
+        fallback_price = 800
+        results.append({
+            "id": "BUS-FALLBACK",
+            "operator": "TripPilot Connect",
+            "bus_type": "Volvo A/C Semi Sleeper",
+            "source": source,
+            "destination": destination,
+            "departure": "22:00",
+            "arrival": "06:00",
+            "duration": "8h 00m",
+            "price": fallback_price,
+            "available_seats": 40,
+            "amenities": ["WiFi", "Charging Point", "Water Bottle"],
+            "rating": 4.3,
+            "seat_types": [
+                {"type": "Seater",       "price": round(fallback_price * 0.85), "available": 20},
+                {"type": "Semi-Sleeper", "price": fallback_price,               "available": 15},
+                {"type": "Full Sleeper", "price": round(fallback_price * 1.30), "available": 5},
+            ],
+            "passengers": passengers,
+            "travel_date": date,
+            "is_demo": True,
+        })
     return results

@@ -89,18 +89,21 @@ function TrainResults() {
 
               <div className="flex flex-wrap gap-3 mt-2 border-t border-slate-700 pt-4">
                 {train.classes && train.classes.map(c => {
-                  const classObj = typeof c === 'string' ? {
-                    type: c,
-                    name: c,
-                    price: train.price || 1200,
-                    available: train.availableSeats || 50
-                  } : c;
+                  // Backend now always sends class objects; guard for legacy string format
+                  const classObj = typeof c === 'string'
+                    ? { type: c, name: c, price: train.base_price || train.price || 1000, available: 20 }
+                    : c;
+                  const totalPrice = classObj.price * (searchParams.passengers || 1);
                   return (
                   <div key={classObj.type} className="flex-1 min-w-[150px] border border-slate-600 rounded-lg p-3 hover:border-indigo-400 transition-colors bg-slate-800 flex flex-col justify-between shadow-sm">
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex justify-between items-center mb-1">
                       <span className="font-semibold text-slate-100">{classObj.name}</span>
                       <span className="text-indigo-300 font-bold text-lg">₹{classObj.price}</span>
                     </div>
+                    <div className="text-xs text-slate-500 mb-1">per person</div>
+                    {(searchParams.passengers || 1) > 1 && (
+                      <div className="text-xs text-amber-400 mb-2">Total: ₹{totalPrice} ({searchParams.passengers} pax)</div>
+                    )}
                     <div className="text-xs text-emerald-400 mb-3 font-medium">Available: {classObj.available} Seats</div>
                     <button onClick={() => handleSelect(train, classObj)} className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-sm transition-colors font-medium shadow-sm">
                       Select

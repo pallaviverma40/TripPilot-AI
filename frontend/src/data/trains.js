@@ -51,10 +51,40 @@ export const trains = [
   { id: 'TRN050', name: 'Gomti Express', trainNumber: '16787', source: 'Pune', destination: 'Firozabad', departure: '08:00', arrival: '18:00', duration: '10h 00m', price: 2398, classes: ['1AC', '2AC', '3AC', 'Sleeper'], availableSeats: 55, amenities: ["E-Catering", "Charging Point", "Bio-Toilets", "Pantry Car"] }
 ];
 
+const CLASS_MULTIPLIERS = { Sleeper: 1.0, '3AC': 1.8, '2AC': 2.5, '1AC': 3.5, CC: 1.2, EC: 1.6, FC: 2.0, SL: 1.0 };
+
+function buildClasses(classTypes, basePrice, seats) {
+  const seatDist = { Sleeper: seats, SL: seats, '3AC': Math.max(8, Math.floor(seats/3)), '2AC': Math.max(4, Math.floor(seats/5)), '1AC': Math.max(2, Math.floor(seats/10)), CC: seats, EC: Math.max(4, Math.floor(seats/2)), FC: Math.max(2, Math.floor(seats/4)) };
+  return classTypes.map(c => ({
+    type: c, name: c,
+    price: Math.round(basePrice * (CLASS_MULTIPLIERS[c] || 1.0)),
+    available: seatDist[c] || Math.max(4, Math.floor(seats / classTypes.length)),
+  }));
+}
+
 export const searchTrains = (source, destination, date, passengers) => {
-  const res = trains.filter(t => (!source || t.source.toLowerCase() === source.toLowerCase()) && (!destination || t.destination.toLowerCase() === destination.toLowerCase()));
-  if (res.length === 0 && source && destination) {
-    res.push({ id: "TRN-FALLBACK", name: "TripPilot Express", trainNumber: "19900", source, destination, departure: "08:00", arrival: "18:00", duration: "10h 00m", price: 1200, classes: ["1AC", "2AC", "3AC", "Sleeper"], availableSeats: 100, amenities: ["Clean Bedding", "Pantry Car"] });
+  const filtered = trains.filter(t =>
+    (!source || t.source.toLowerCase().includes(source.toLowerCase()) || source.toLowerCase().includes(t.source.toLowerCase())) &&
+    (!destination || t.destination.toLowerCase().includes(destination.toLowerCase()) || destination.toLowerCase().includes(t.destination.toLowerCase()))
+  );
+  const results = filtered.map(t => ({
+    ...t,
+    classes: buildClasses(t.classes, t.price, t.availableSeats || 50),
+    base_price: t.price,
+    passengers,
+    travel_date: date,
+    is_demo: true,
+  }));
+  if (results.length === 0 && source && destination) {
+    const base = 450;
+    results.push({
+      id: 'TRN-FALLBACK', name: 'TripPilot Express', trainNumber: '19900',
+      source, destination, departure: '08:00', arrival: '20:00', duration: '12h 00m',
+      price: base, base_price: base,
+      classes: buildClasses(['Sleeper','3AC','2AC','1AC'], base, 100),
+      availableSeats: 100, amenities: ['Clean Bedding','Pantry Car'],
+      passengers, travel_date: date, is_demo: true,
+    });
   }
-  return res;
+  return results;
 };
