@@ -8,16 +8,17 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
       - key: MONGODB_URI
         sync: false
       - key: DB_NAME
         value: trippilot_db
       - key: SECRET_KEY
-        sync: false
+        value: trippilot-super-secret-key-change-in-production-2024
       - key: ALGORITHM
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: 1440
       - key: ALLOWED_ORIGINS
-        sync: false
-
+        value: "*"

@@ -1,0 +1,17 @@
+{
+  "name": "trippilot-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TripPilot AI FastAPI Backend Service",
+  "scripts": {
+    "start": "python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}",
+    "build": "pip install -r requirements.txt",
+    "dev": "python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000"
+  },
+  "keywords": [
+    "fastapi",
+    "trippilot-backend"
+  ],
+  "author": "TripPilot Team",
+  "license": "MIT"
+}
