@@ -179,3 +179,4 @@ export function calculateBusSeatPrices(roadKm, busType = 'volvo') {
     base: baseFare,
   };
 }
+

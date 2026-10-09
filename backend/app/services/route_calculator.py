@@ -215,3 +215,4 @@ def calculate_bus_seat_prices(road_km: int, bus_type: str = "volvo") -> Dict[str
         "Full Sleeper": max(850, min(1500, round((base_fare * 1.35) / 10) * 10)),
         "base": base_fare,
     }
+
