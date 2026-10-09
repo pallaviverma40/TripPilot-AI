@@ -1,71 +1,59 @@
+"""
+Bus Service — Mock Data with Seat-Type Pricing
+"""
+
 MOCK_BUSES = [
-    {"id": "BUS001", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Delhi", "destination": "Hyderabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 512, "available_seats": 30, "amenities": ["CCTV", "Track My Bus", "Reading Light"], "rating": 3.8},
-    {"id": "BUS002", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Lucknow", "destination": "Delhi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1344, "available_seats": 9, "amenities": ["Charging Point", "Blanket", "CCTV", "Water Bottle"], "rating": 4.8},
-    {"id": "BUS003", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Mumbai", "destination": "Jaipur", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1404, "available_seats": 39, "amenities": ["CCTV", "WiFi", "Charging Point"], "rating": 4.6},
-    {"id": "BUS004", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Lucknow", "destination": "Jaipur", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1478, "available_seats": 23, "amenities": ["WiFi", "Reading Light", "Track My Bus", "Snacks", "Blanket"], "rating": 4.7},
-    {"id": "BUS005", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Bangalore", "destination": "Agra", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1401, "available_seats": 31, "amenities": ["Water Bottle", "CCTV", "Track My Bus"], "rating": 4.7},
-    {"id": "BUS006", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Bangalore", "destination": "Delhi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 884, "available_seats": 15, "amenities": ["Reading Light", "Blanket", "Track My Bus", "CCTV", "Charging Point"], "rating": 4.1},
-    {"id": "BUS007", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Kanpur", "destination": "Agra", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 947, "available_seats": 31, "amenities": ["Water Bottle", "Track My Bus", "CCTV", "Charging Point"], "rating": 4.2},
-    {"id": "BUS008", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Varanasi", "destination": "Agra", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 939, "available_seats": 12, "amenities": ["Water Bottle", "Charging Point", "Reading Light", "CCTV"], "rating": 4.6},
-    {"id": "BUS009", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Lucknow", "destination": "Firozabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 724, "available_seats": 33, "amenities": ["Snacks", "Track My Bus", "WiFi", "CCTV"], "rating": 4.5},
-    {"id": "BUS010", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Bangalore", "destination": "Pune", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1381, "available_seats": 12, "amenities": ["Charging Point", "Blanket", "Track My Bus"], "rating": 4.3},
-    {"id": "BUS011", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Hyderabad", "destination": "Mumbai", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1033, "available_seats": 38, "amenities": ["CCTV", "Reading Light", "Blanket", "Charging Point"], "rating": 4.9},
-    {"id": "BUS012", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Delhi", "destination": "Mumbai", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1496, "available_seats": 35, "amenities": ["Blanket", "CCTV", "Track My Bus", "WiFi"], "rating": 4.2},
-    {"id": "BUS013", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Hyderabad", "destination": "Lucknow", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1129, "available_seats": 8, "amenities": ["Track My Bus", "WiFi", "Water Bottle"], "rating": 4.4},
-    {"id": "BUS014", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Varanasi", "destination": "Bangalore", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1351, "available_seats": 14, "amenities": ["CCTV", "Snacks", "WiFi", "Blanket"], "rating": 4.7},
-    {"id": "BUS015", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Jaipur", "destination": "Delhi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 751, "available_seats": 14, "amenities": ["Reading Light", "Snacks", "CCTV", "WiFi"], "rating": 4.5},
-    {"id": "BUS016", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Pune", "destination": "Jaipur", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 435, "available_seats": 17, "amenities": ["Water Bottle", "Track My Bus", "WiFi", "CCTV", "Blanket"], "rating": 3.9},
-    {"id": "BUS017", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Bangalore", "destination": "Firozabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1018, "available_seats": 5, "amenities": ["Reading Light", "Track My Bus", "WiFi"], "rating": 4.8},
-    {"id": "BUS018", "operator": "IntrCity SmartBus", "bus_type": "A/C Sleeper", "source": "Lucknow", "destination": "Kanpur", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 959, "available_seats": 34, "amenities": ["Blanket", "WiFi", "Charging Point"], "rating": 3.9},
-    {"id": "BUS019", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Firozabad", "destination": "Bangalore", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 719, "available_seats": 20, "amenities": ["Charging Point", "CCTV", "WiFi", "Reading Light", "Blanket"], "rating": 4.9},
-    {"id": "BUS020", "operator": "UPSRTC Volvo", "bus_type": "Volvo A/C Seater/Sleeper", "source": "Bangalore", "destination": "Pune", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1652, "available_seats": 9, "amenities": ["Track My Bus", "CCTV", "Charging Point", "Reading Light", "Snacks"], "rating": 4.4},
-    {"id": "BUS021", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Varanasi", "destination": "Kochi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 545, "available_seats": 18, "amenities": ["Charging Point", "Reading Light", "Blanket"], "rating": 4.5},
-    {"id": "BUS022", "operator": "UPSRTC Volvo", "bus_type": "Volvo A/C Seater/Sleeper", "source": "Pune", "destination": "Kochi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 998, "available_seats": 18, "amenities": ["Blanket", "CCTV", "WiFi", "Reading Light", "Charging Point"], "rating": 4.4},
-    {"id": "BUS023", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Firozabad", "destination": "Hyderabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 640, "available_seats": 36, "amenities": ["Snacks", "Charging Point", "Water Bottle", "Blanket"], "rating": 4.2},
-    {"id": "BUS024", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Kochi", "destination": "Hyderabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1710, "available_seats": 39, "amenities": ["Reading Light", "Snacks", "WiFi"], "rating": 4.3},
-    {"id": "BUS025", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Bangalore", "destination": "Pune", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1364, "available_seats": 37, "amenities": ["Blanket", "Charging Point", "WiFi", "Reading Light"], "rating": 4.5},
-    {"id": "BUS026", "operator": "IntrCity SmartBus", "bus_type": "A/C Sleeper", "source": "Kochi", "destination": "Hyderabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 819, "available_seats": 34, "amenities": ["WiFi", "Blanket", "Snacks", "Reading Light", "Water Bottle"], "rating": 4.8},
-    {"id": "BUS027", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Agra", "destination": "Jaipur", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1506, "available_seats": 25, "amenities": ["Reading Light", "Blanket", "WiFi", "CCTV"], "rating": 4.9},
-    {"id": "BUS028", "operator": "UPSRTC Volvo", "bus_type": "Volvo A/C Seater/Sleeper", "source": "Bangalore", "destination": "Hyderabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1540, "available_seats": 21, "amenities": ["WiFi", "Snacks", "Water Bottle"], "rating": 4.0},
-    {"id": "BUS029", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Varanasi", "destination": "Bangalore", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1455, "available_seats": 37, "amenities": ["Track My Bus", "Reading Light", "Water Bottle", "Charging Point", "Snacks"], "rating": 4.3},
-    {"id": "BUS030", "operator": "UPSRTC Volvo", "bus_type": "Volvo A/C Seater/Sleeper", "source": "Mumbai", "destination": "Firozabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1358, "available_seats": 27, "amenities": ["Blanket", "Charging Point", "Snacks"], "rating": 4.0},
-    {"id": "BUS031", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Agra", "destination": "Mumbai", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1196, "available_seats": 24, "amenities": ["Reading Light", "WiFi", "CCTV"], "rating": 4.2},
-    {"id": "BUS032", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Jaipur", "destination": "Mumbai", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1470, "available_seats": 26, "amenities": ["Snacks", "Water Bottle", "Blanket", "CCTV"], "rating": 3.8},
-    {"id": "BUS033", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Agra", "destination": "Bangalore", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1618, "available_seats": 9, "amenities": ["Reading Light", "Snacks", "WiFi"], "rating": 4.2},
-    {"id": "BUS034", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Pune", "destination": "Agra", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1752, "available_seats": 25, "amenities": ["Reading Light", "Track My Bus", "WiFi", "Charging Point", "Water Bottle"], "rating": 4.3},
-    {"id": "BUS035", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Lucknow", "destination": "Kochi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1410, "available_seats": 8, "amenities": ["Water Bottle", "CCTV", "WiFi", "Track My Bus"], "rating": 4.4},
-    {"id": "BUS036", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Varanasi", "destination": "Lucknow", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 876, "available_seats": 17, "amenities": ["Reading Light", "Track My Bus", "Water Bottle"], "rating": 4.4},
-    {"id": "BUS037", "operator": "IntrCity SmartBus", "bus_type": "A/C Sleeper", "source": "Pune", "destination": "Kochi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1165, "available_seats": 12, "amenities": ["Blanket", "WiFi", "Snacks", "Reading Light"], "rating": 4.5},
-    {"id": "BUS038", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Delhi", "destination": "Varanasi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1597, "available_seats": 8, "amenities": ["Charging Point", "CCTV", "Track My Bus"], "rating": 3.9},
-    {"id": "BUS039", "operator": "NueGo Electric", "bus_type": "A/C Seater (Electric)", "source": "Varanasi", "destination": "Agra", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 943, "available_seats": 38, "amenities": ["Water Bottle", "CCTV", "Track My Bus"], "rating": 4.0},
-    {"id": "BUS040", "operator": "UPSRTC Volvo", "bus_type": "Volvo A/C Seater/Sleeper", "source": "Bangalore", "destination": "Mumbai", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1468, "available_seats": 5, "amenities": ["Snacks", "Track My Bus", "WiFi", "Charging Point", "Blanket"], "rating": 4.8},
-    {"id": "BUS041", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Firozabad", "destination": "Mumbai", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1152, "available_seats": 25, "amenities": ["Water Bottle", "Reading Light", "Snacks", "Blanket", "CCTV"], "rating": 4.1},
-    {"id": "BUS042", "operator": "IntrCity SmartBus", "bus_type": "A/C Sleeper", "source": "Delhi", "destination": "Jaipur", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 535, "available_seats": 17, "amenities": ["Blanket", "Track My Bus", "WiFi", "Charging Point"], "rating": 4.3},
-    {"id": "BUS043", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Mumbai", "destination": "Bangalore", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 673, "available_seats": 18, "amenities": ["Charging Point", "Water Bottle", "Track My Bus"], "rating": 4.2},
-    {"id": "BUS044", "operator": "UPSRTC Volvo", "bus_type": "Volvo A/C Seater/Sleeper", "source": "Kochi", "destination": "Varanasi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 988, "available_seats": 34, "amenities": ["WiFi", "CCTV", "Blanket", "Track My Bus", "Snacks"], "rating": 4.0},
-    {"id": "BUS045", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Delhi", "destination": "Bangalore", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 588, "available_seats": 7, "amenities": ["Reading Light", "WiFi", "Track My Bus", "CCTV"], "rating": 4.6},
-    {"id": "BUS046", "operator": "IntrCity SmartBus", "bus_type": "A/C Sleeper", "source": "Lucknow", "destination": "Delhi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1007, "available_seats": 11, "amenities": ["WiFi", "Reading Light", "CCTV", "Blanket", "Water Bottle"], "rating": 4.2},
-    {"id": "BUS047", "operator": "UPSRTC Janrath", "bus_type": "A/C Seater (2+2)", "source": "Hyderabad", "destination": "Firozabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 554, "available_seats": 37, "amenities": ["Snacks", "WiFi", "Water Bottle"], "rating": 4.7},
-    {"id": "BUS048", "operator": "Zingbus", "bus_type": "Volvo A/C Sleeper", "source": "Hyderabad", "destination": "Pune", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 553, "available_seats": 13, "amenities": ["Water Bottle", "Blanket", "CCTV", "Reading Light"], "rating": 4.9},
-    {"id": "BUS049", "operator": "Orange Tours", "bus_type": "Volvo Multi-Axle Sleeper", "source": "Agra", "destination": "Hyderabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 507, "available_seats": 13, "amenities": ["Snacks", "Blanket", "CCTV", "Reading Light"], "rating": 3.9},
-    {"id": "BUS050", "operator": "IntrCity SmartBus", "bus_type": "A/C Sleeper", "source": "Pune", "destination": "Firozabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 523, "available_seats": 7, "amenities": ["Blanket", "Charging Point", "Reading Light"], "rating": 4.2}
+    # ── Ayodhya (Heritage & Spiritual) ──
+    {"id": "BUS051", "operator": "UPSRTC Janrath",    "bus_type": "A/C Seater (2+2)",          "source": "Lucknow", "destination": "Ayodhya", "departure": "06:00", "arrival": "08:45", "duration": "2h 45m", "price": 280,  "available_seats": 32, "amenities": ["CCTV", "Track My Bus", "Charging Point"], "rating": 4.5},
+    {"id": "BUS052", "operator": "IntrCity SmartBus", "bus_type": "Volvo A/C Sleeper",         "source": "Delhi",   "destination": "Ayodhya", "departure": "21:30", "arrival": "06:30", "duration": "9h 00m", "price": 850,  "available_seats": 24, "amenities": ["WiFi", "Blanket", "Water Bottle", "Charging Point"], "rating": 4.7},
+    {"id": "BUS053", "operator": "NueGo Electric",    "bus_type": "A/C Seater (Electric)",     "source": "Lucknow", "destination": "Ayodhya", "departure": "09:30", "arrival": "12:00", "duration": "2h 30m", "price": 320,  "available_seats": 20, "amenities": ["CCTV", "Clean Air", "Live Tracking"], "rating": 4.8},
+    {"id": "BUS054", "operator": "Zingbus",           "bus_type": "Volvo Multi-Axle Sleeper",  "source": "Varanasi","destination": "Ayodhya", "departure": "07:00", "arrival": "11:00", "duration": "4h 00m", "price": 450,  "available_seats": 18, "amenities": ["Reading Light", "Blanket", "Snacks"], "rating": 4.6},
+
+    # ── Haridwar (Spiritual Ghats & Ashrams) ──
+    {"id": "BUS055", "operator": "Zingbus",           "bus_type": "Volvo A/C Sleeper",         "source": "Delhi",   "destination": "Haridwar", "departure": "22:00", "arrival": "04:30", "duration": "6h 30m", "price": 620,  "available_seats": 28, "amenities": ["Blanket", "Charging Point", "WiFi", "Water Bottle"], "rating": 4.7},
+    {"id": "BUS056", "operator": "NueGo Electric",    "bus_type": "A/C Seater (Electric)",     "source": "Delhi",   "destination": "Haridwar", "departure": "07:00", "arrival": "12:30", "duration": "5h 30m", "price": 540,  "available_seats": 35, "amenities": ["CCTV", "Live Tracking", "USB Charging"], "rating": 4.8},
+    {"id": "BUS057", "operator": "UTC Volvo",         "bus_type": "Volvo A/C Seater/Sleeper",  "source": "Chandigarh","destination": "Haridwar", "departure": "06:30", "arrival": "11:30", "duration": "5h 00m", "price": 480,  "available_seats": 22, "amenities": ["Water Bottle", "Clean Interior"], "rating": 4.4},
+
+    # ── Nainital (Nature & Lakes) ──
+    {"id": "BUS058", "operator": "UTC Royal Cruiser", "bus_type": "Volvo A/C Seater",         "source": "Delhi",   "destination": "Nainital", "departure": "21:00", "arrival": "05:30", "duration": "8h 30m", "price": 780,  "available_seats": 26, "amenities": ["Mountain Certified", "Blanket", "Charging Point"], "rating": 4.6},
+    {"id": "BUS059", "operator": "Zingbus",           "bus_type": "Volvo A/C Sleeper",         "source": "Delhi",   "destination": "Nainital", "departure": "22:30", "arrival": "06:45", "duration": "8h 15m", "price": 890,  "available_seats": 16, "amenities": ["WiFi", "Blanket", "Live Tracking", "Snacks"], "rating": 4.7},
+    {"id": "BUS060", "operator": "City Land Travels", "bus_type": "A/C Seater (2+2)",          "source": "Lucknow", "destination": "Nainital", "departure": "20:00", "arrival": "06:00", "duration": "10h 00m", "price": 650, "available_seats": 30, "amenities": ["Track My Bus", "Charging Point"], "rating": 4.3},
+
+    # ── Varanasi (Banaras Ghats & Culture) ──
+    {"id": "BUS061", "operator": "UPSRTC Volvo",      "bus_type": "Volvo A/C Seater/Sleeper",  "source": "Lucknow", "destination": "Varanasi", "departure": "06:00", "arrival": "11:30", "duration": "5h 30m", "price": 580,  "available_seats": 28, "amenities": ["Clean Bedding", "Charging Point"], "rating": 4.5},
+    {"id": "BUS062", "operator": "IntrCity SmartBus", "bus_type": "Volvo A/C Sleeper",         "source": "Delhi",   "destination": "Varanasi", "departure": "19:00", "arrival": "08:30", "duration": "13h 30m", "price": 1150, "available_seats": 19, "amenities": ["WiFi", "Clean Bedding", "Live Tracking"], "rating": 4.8},
+    {"id": "BUS063", "operator": "NueGo Electric",    "bus_type": "A/C Seater (Electric)",     "source": "Patna",   "destination": "Varanasi", "departure": "07:30", "arrival": "12:30", "duration": "5h 00m", "price": 490,  "available_seats": 30, "amenities": ["USB Charging", "CCTV"], "rating": 4.6},
+
+    # ── Jammu and Kashmir ──
+    {"id": "BUS064", "operator": "JKSRTC Volvo",      "bus_type": "Volvo A/C Sleeper",         "source": "Delhi",   "destination": "Jammu and Kashmir", "departure": "18:00", "arrival": "07:00", "duration": "13h 00m", "price": 1250, "available_seats": 20, "amenities": ["Blanket", "Water Bottle", "Heater"], "rating": 4.6},
+    {"id": "BUS065", "operator": "Zingbus",           "bus_type": "Volvo Multi-Axle Sleeper",  "source": "Chandigarh","destination": "Jammu and Kashmir", "departure": "21:00", "arrival": "06:00", "duration": "9h 00m", "price": 980, "available_seats": 24, "amenities": ["WiFi", "Blanket", "Charging Point"], "rating": 4.7},
+
+    # ── Raipur (Tribal Culture & Nature) ──
+    {"id": "BUS066", "operator": "Mahendra Travels",  "bus_type": "Volvo A/C Sleeper",         "source": "Nagpur",  "destination": "Raipur", "departure": "23:00", "arrival": "05:00", "duration": "6h 00m", "price": 550,  "available_seats": 32, "amenities": ["Clean Bedding", "CCTV", "Track My Bus"], "rating": 4.5},
+    {"id": "BUS067", "operator": "Royal Travels",     "bus_type": "A/C Sleeper",               "source": "Bhubaneswar","destination": "Raipur", "departure": "19:30", "arrival": "07:30", "duration": "12h 00m", "price": 820, "available_seats": 18, "amenities": ["Blanket", "Charging Point"], "rating": 4.3},
+
+    # ── Karnataka (Bangalore, Mysore, Coorg, Hampi) ──
+    {"id": "BUS068", "operator": "KSRTC Airavat",     "bus_type": "Volvo Multi-Axle Club Class","source": "Chennai", "destination": "Karnataka", "departure": "23:00", "arrival": "05:30", "duration": "6h 30m", "price": 750,  "available_seats": 34, "amenities": ["WiFi", "Water Bottle", "Blanket"], "rating": 4.8},
+    {"id": "BUS069", "operator": "Greenline Travels", "bus_type": "Volvo A/C Sleeper",         "source": "Hyderabad","destination": "Karnataka", "departure": "21:30", "arrival": "06:30", "duration": "9h 00m", "price": 950,  "available_seats": 20, "amenities": ["Track My Bus", "Clean Bedding"], "rating": 4.6},
+    {"id": "BUS070", "operator": "Orange Tours",      "bus_type": "Volvo Multi-Axle Sleeper",  "source": "Goa",     "destination": "Karnataka", "departure": "20:00", "arrival": "07:00", "duration": "11h 00m", "price": 1100, "available_seats": 18, "amenities": ["WiFi", "Blanket", "Snacks"], "rating": 4.7},
+
+    # ── Standard Trunk Routes ──
+    {"id": "BUS001", "operator": "UPSRTC Janrath",    "bus_type": "A/C Seater (2+2)",          "source": "Delhi",   "destination": "Hyderabad", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 512,  "available_seats": 30, "amenities": ["CCTV", "Track My Bus", "Reading Light"], "rating": 3.8},
+    {"id": "BUS002", "operator": "NueGo Electric",    "bus_type": "A/C Seater (Electric)",     "source": "Lucknow", "destination": "Delhi", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1344, "available_seats": 9, "amenities": ["Charging Point", "Blanket", "CCTV", "Water Bottle"], "rating": 4.8},
+    {"id": "BUS004", "operator": "Orange Tours",      "bus_type": "Volvo Multi-Axle Sleeper",  "source": "Lucknow", "destination": "Jaipur", "departure": "22:00", "arrival": "06:00", "duration": "8h 00m", "price": 1478, "available_seats": 23, "amenities": ["WiFi", "Reading Light", "Track My Bus", "Snacks", "Blanket"], "rating": 4.7},
 ]
 
-# Pricing for seat types within each bus category
 _BUS_SEAT_TYPES = {
-    # Sleeper buses
     "sleeper": [
         {"type": "Lower Berth", "price_factor": 1.15, "available": 12},
         {"type": "Upper Berth", "price_factor": 1.00, "available": 18},
         {"type": "Single Sleeper", "price_factor": 1.35, "available": 4},
     ],
-    # Seater buses
     "seater": [
         {"type": "Window Seat",  "price_factor": 1.10, "available": 10},
         {"type": "Aisle Seat",   "price_factor": 1.00, "available": 20},
         {"type": "Front Row",    "price_factor": 1.20, "available": 4},
     ],
-    # Volvo multi-axle / mixed seater-sleeper
     "mixed": [
         {"type": "Seater",       "price_factor": 0.85, "available": 14},
         {"type": "Semi-Sleeper", "price_factor": 1.00, "available": 12},
@@ -82,8 +70,8 @@ def _get_seat_category(bus_type: str) -> str:
     return "seater"
 
 def _build_seat_types(bus: dict) -> list:
-    category = _get_seat_category(bus["bus_type"])
-    base = bus["price"]
+    category = _get_seat_category(bus.get("bus_type", ""))
+    base = bus.get("price", 600)
     result = []
     for st in _BUS_SEAT_TYPES[category]:
         result.append({
@@ -124,7 +112,7 @@ def search_buses(source: str, destination: str, date: str, passengers: int) -> l
             "price": fallback_price,
             "available_seats": 40,
             "amenities": ["WiFi", "Charging Point", "Water Bottle"],
-            "rating": 4.3,
+            "rating": 4.5,
             "seat_types": [
                 {"type": "Seater",       "price": round(fallback_price * 0.85), "available": 20},
                 {"type": "Semi-Sleeper", "price": fallback_price,               "available": 15},
