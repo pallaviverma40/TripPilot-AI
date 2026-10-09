@@ -487,6 +487,7 @@ function TransportResults() {
                         <div className="flex flex-col items-center flex-1 px-4">
                           <span className="text-xs text-slate-400 mb-1 flex items-center gap-1 font-medium">
                             <Clock className="w-3 h-3 text-sky-400"/> {item.duration}
+                            {item.distance && <span className="text-[10px] text-slate-500 font-normal">({item.distance})</span>}
                           </span>
                           <div className="w-full h-[2px] bg-slate-700 relative flex items-center justify-center">
                             <Plane className="w-3.5 h-3.5 text-sky-400 rotate-90" />
@@ -573,6 +574,7 @@ function TransportResults() {
                         <div className="flex flex-col items-center flex-1 px-4">
                           <span className="text-xs text-slate-400 mb-1 flex items-center gap-1 font-medium">
                             <Clock className="w-3 h-3 text-emerald-400"/> {item.duration}
+                            {item.distance && <span className="text-[10px] text-slate-500 font-normal">({item.distance})</span>}
                           </span>
                           <div className="w-full h-[2px] bg-slate-700 relative flex items-center justify-center">
                             <Train className="w-3.5 h-3.5 text-emerald-400" />
@@ -680,6 +682,7 @@ function TransportResults() {
                         <div className="flex flex-col items-center flex-1 px-4">
                           <span className="text-xs text-slate-400 mb-1 flex items-center gap-1 font-medium">
                             <Clock className="w-3 h-3 text-amber-400"/> {item.duration}
+                            {item.distance && <span className="text-[10px] text-slate-500 font-normal">({item.distance})</span>}
                           </span>
                           <div className="w-full h-[2px] bg-slate-700 relative flex items-center justify-center">
                             <Bus className="w-3.5 h-3.5 text-amber-400" />
