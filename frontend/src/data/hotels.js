@@ -43,13 +43,13 @@ const hotels = [
   { id: 'HT001', name: 'The Taj Mahal Hotel', destination: 'Delhi', address: 'Mansingh Road, New Delhi', rating: 5, reviewCount: 2840, pricePerNight: 8500, category: 'Luxury', amenities: ['Pool', 'Gym', 'Spa', 'Restaurant', 'WiFi', 'Parking'], description: 'Iconic 5-star hotel in the heart of New Delhi.', cancellation: 'Free cancellation before 24h', breakfast: true },
   { id: 'HT003', name: 'Taj Holiday Village', destination: 'Goa', address: 'Sinquerim, Candolim', rating: 5, reviewCount: 3100, pricePerNight: 12500, category: 'Luxury', amenities: ['Beach Access', 'Pool', 'Spa', 'Bar', 'WiFi'], description: 'Heritage resort with Goan-Portuguese architecture.', cancellation: 'Free cancellation before 48h', breakfast: true },
   { id: 'HT005', name: 'Taj Lands End', destination: 'Mumbai', address: 'Bandra West, Mumbai', rating: 5, reviewCount: 4200, pricePerNight: 11000, category: 'Luxury', amenities: ['Sea View', 'Pool', 'Spa', 'WiFi'], description: 'Overlooking the Arabian Sea and the Bandra Worli Sea Link.', cancellation: 'Free cancellation before 24h', breakfast: false },
-  { id: 'HT006', name: 'Rambagh Palace', destination: 'Jaipur', address: 'Bhawani Singh Road', rating: 5, reviewCount: 2100, pricePerNight: 25000, category: 'Luxury', amenities: ['Palace', 'Pool', 'Spa', 'Royal Dining'], description: 'Experience the finest traditions of Rajput hospitality.', cancellation: 'Free cancellation before 7 days', breakfast: true },
-  { id: 'HT007', name: 'Renaissance Hotel', destination: 'Lucknow', address: 'Gomti Nagar', rating: 5, reviewCount: 890, pricePerNight: 5500, category: 'Luxury', amenities: ['Rooftop Pool', 'Gym', 'Restaurant', 'WiFi'], description: 'Tallest hotel in Lucknow with spectacular city views.', cancellation: 'Free cancellation before 24h', breakfast: true }
+  { id: 'HT006', name: 'Rambagh Palace', destination: 'Jaipur', address: 'Bhawani Singh Road, Jaipur', rating: 5, reviewCount: 2100, pricePerNight: 25000, category: 'Luxury', amenities: ['Palace', 'Pool', 'Spa', 'Royal Dining'], description: 'Experience the finest traditions of Rajput hospitality.', cancellation: 'Free cancellation before 7 days', breakfast: true },
+  { id: 'HT007', name: 'Renaissance Hotel', destination: 'Lucknow', address: 'Vipin Khand, Gomti Nagar, Lucknow', rating: 5, reviewCount: 890, pricePerNight: 5500, category: 'Luxury', amenities: ['Rooftop Pool', 'Gym', 'Restaurant', 'WiFi'], description: 'Tallest hotel in Lucknow with spectacular city views.', cancellation: 'Free cancellation before 24h', breakfast: true }
 ];
 
 export const searchHotels = (destination, checkin, checkout, guests) => {
   const dest = (destination || '').toLowerCase().trim();
-  let nights = 1;
+  let nights = 2; // Default 2 nights
   if (checkin && checkout) {
     const d1 = new Date(checkin);
     const d2 = new Date(checkout);
@@ -61,12 +61,53 @@ export const searchHotels = (destination, checkin, checkout, guests) => {
     !dest || h.destination.toLowerCase().includes(dest) || dest.includes(h.destination.toLowerCase())
   );
 
-  return matches.map(h => ({
-    ...h,
-    price_per_night: h.pricePerNight,
-    total_price: h.pricePerNight * nights,
-    nights: nights,
-    guests: guests || 1,
-    is_demo: true
-  }));
+  const formattedMatches = matches.map(h => {
+    const nightly = Number(h.pricePerNight || h.price_per_night || 3500);
+    const total = nightly * nights;
+    return {
+      ...h,
+      price: nightly,
+      pricePerNight: nightly,
+      price_per_night: nightly,
+      nightly_price: nightly,
+      total_price: total,
+      totalPrice: total,
+      total_stay_price: total,
+      nights: nights,
+      guests: Number(guests) || 1,
+      is_demo: true
+    };
+  });
+
+  if (formattedMatches.length === 0 && destination) {
+    const baseRate = 3500;
+    formattedMatches.push({
+      id: `HT-${destination.slice(0, 3).toUpperCase()}-FALLBACK`,
+      name: `Grand ${destination} Heritage Inn & Suites`,
+      destination: destination,
+      address: `Central Landmark Road, ${destination}`,
+      rating: 4,
+      reviewCount: 850,
+      price: baseRate,
+      pricePerNight: baseRate,
+      price_per_night: baseRate,
+      nightly_price: baseRate,
+      total_price: baseRate * nights,
+      totalPrice: baseRate * nights,
+      total_stay_price: baseRate * nights,
+      category: 'Standard',
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Room Service', 'Parking'],
+      description: `Comfortable hotel located centrally in ${destination} with contemporary amenities.`,
+      cancellation: 'Free cancellation before 24h',
+      breakfast: true,
+      room_types: ['Deluxe Room', 'Executive Suite'],
+      nights: nights,
+      guests: Number(guests) || 1,
+      is_demo: true
+    });
+  }
+
+  return formattedMatches;
 };
+
+export { hotels };

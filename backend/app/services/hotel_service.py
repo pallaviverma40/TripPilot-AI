@@ -1,8 +1,9 @@
 """
-Hotel Service — Mock Data
-Realistic hotel data across Indian destinations in Demo Mode.
+Hotel Service — Mock Data & Dynamic Pricing
+Realistic hotel data across Indian destinations with complete price field normalization.
 """
 from datetime import datetime
+from typing import Optional, List, Dict, Any
 
 
 MOCK_HOTELS = [
@@ -49,61 +50,83 @@ MOCK_HOTELS = [
     # ── Standard Base Cities ──
     {"id": "HT001", "name": "The Leela Palace New Delhi", "destination": "Delhi", "address": "Diplomatic Enclave, Chanakyapuri, New Delhi", "rating": 5, "review_count": 3240, "price_per_night": 12000, "category": "Luxury", "amenities": ["Pool", "Gym", "Spa", "Restaurant", "Bar", "WiFi", "Parking", "Room Service"], "description": "Iconic 5-star palace hotel offering regal splendor in the heart of Delhi.", "cancellation": "Free cancellation before 48h", "breakfast": True, "room_types": ["Deluxe", "Suite"]},
     {"id": "HT006", "name": "W Goa", "destination": "Goa", "address": "Vagator Beach, North Goa", "rating": 5, "review_count": 2890, "price_per_night": 15000, "category": "Luxury", "amenities": ["Infinity Pool", "Spa", "Beach Access", "Gym"], "description": "Stunning beachfront luxury resort with spectacular Arabian Sea views.", "cancellation": "Free cancellation before 72h", "breakfast": True, "room_types": ["Wonderful Room", "Fabulous Suite"]},
+    {"id": "HT007", "name": "Taj Holiday Village Resort & Spa", "destination": "Goa", "address": "Sinquerim, Candolim, North Goa", "rating": 5, "review_count": 3100, "price_per_night": 12500, "category": "Luxury", "amenities": ["Beach Access", "Pool", "Spa", "Bar", "WiFi"], "description": "Heritage resort with Goan-Portuguese architecture on the beach.", "cancellation": "Free cancellation before 48h", "breakfast": True, "room_types": ["Cottage", "Sea View Villa"]},
     {"id": "HT011", "name": "The Oberoi Mumbai", "destination": "Mumbai", "address": "Nariman Point, Mumbai", "rating": 5, "review_count": 2650, "price_per_night": 16000, "category": "Luxury", "amenities": ["Pool", "Spa", "Gym", "Multiple Restaurants", "Sea View"], "description": "Magnificent hotel overlooking the Arabian Sea with legendary hospitality.", "cancellation": "Free cancellation before 48h", "breakfast": True, "room_types": ["Deluxe", "Luxury Suite"]},
-    {"id": "HT018", "name": "Taj Mahal Lucknow", "destination": "Lucknow", "address": "Vipin Khand, Gomti Nagar, Lucknow", "rating": 5, "review_count": 1890, "price_per_night": 8500, "category": "Luxury", "amenities": ["Pool", "Spa", "Gym", "Restaurant", "WiFi"], "description": "Luxury hotel in Gomti Nagar offering world-class amenities.", "cancellation": "Free cancellation before 48h", "breakfast": True, "room_types": ["Deluxe", "Suite"]},
+    {"id": "HT012", "name": "Taj Lands End", "destination": "Mumbai", "address": "Bandra West, Mumbai", "rating": 5, "review_count": 4200, "price_per_night": 11000, "category": "Luxury", "amenities": ["Sea View", "Pool", "Spa", "WiFi"], "description": "Overlooking the Arabian Sea and the Bandra Worli Sea Link.", "cancellation": "Free cancellation before 24h", "breakfast": False, "room_types": ["Deluxe Sea View", "Luxury Room"]},
+    {"id": "HT015", "name": "Rambagh Palace Jaipur", "destination": "Jaipur", "address": "Bhawani Singh Road, Jaipur", "rating": 5, "review_count": 2100, "price_per_night": 25000, "category": "Luxury", "amenities": ["Palace", "Pool", "Spa", "Royal Dining"], "description": "Experience the finest royal traditions of Rajput hospitality in the Jewel of Jaipur.", "cancellation": "Free cancellation before 7 days", "breakfast": True, "room_types": ["Palace Room", "Historical Suite"]},
+    {"id": "HT018", "name": "Taj Mahal Lucknow", "destination": "Lucknow", "address": "Vipin Khand, Gomti Nagar, Lucknow", "rating": 5, "review_count": 1890, "price_per_night": 8500, "category": "Luxury", "amenities": ["Pool", "Spa", "Gym", "Restaurant", "WiFi"], "description": "Luxury hotel in Gomti Nagar offering world-class amenities and Nawabi warmth.", "cancellation": "Free cancellation before 48h", "breakfast": True, "room_types": ["Deluxe", "Suite"]},
+    {"id": "HT019", "name": "Renaissance Lucknow Hotel", "destination": "Lucknow", "address": "Vipin Khand, Gomti Nagar, Lucknow", "rating": 5, "review_count": 890, "price_per_night": 5500, "category": "Premium", "amenities": ["Rooftop Pool", "Gym", "Restaurant", "WiFi"], "description": "Tallest luxury hotel in Lucknow with spectacular panoramic city views.", "cancellation": "Free cancellation before 24h", "breakfast": True, "room_types": ["Superior", "Executive Suite"]},
 ]
 
 
-def search_hotels(destination: str, checkin: str, checkout: str, guests: int) -> list:
-    """Search hotels by destination and calculate total price."""
+def _format_hotel_record(h: dict, nights: int, guests: int) -> dict:
+    price = int(h.get("price_per_night") or h.get("pricePerNight") or h.get("price") or 3500)
+    total = price * max(1, nights)
+    record = dict(h)
+    # Guarantee ALL standard naming conventions for price
+    record["price"] = price
+    record["price_per_night"] = price
+    record["pricePerNight"] = price
+    record["nightly_price"] = price
+    record["total_price"] = total
+    record["totalPrice"] = total
+    record["total_stay_price"] = total
+    record["nights"] = nights
+    record["guests"] = guests
+    record["is_demo"] = True
+    return record
+
+
+def search_hotels(destination: str, checkin: Optional[str] = None, checkout: Optional[str] = None, guests: int = 1) -> List[dict]:
+    """Search hotels by destination and calculate total price with complete fallback safety."""
     dest_lower = destination.lower().strip() if destination else ""
 
-    # Calculate nights
-    nights = 1
+    # Calculate nights with robust fallback
+    nights = 2  # default 2 nights for leisure/trip planning
     if checkin and checkout:
         try:
-            d1 = datetime.strptime(checkin, "%Y-%m-%d")
-            d2 = datetime.strptime(checkout, "%Y-%m-%d")
-            nights = max(1, (d2 - d1).days)
+            d1 = datetime.strptime(checkin.strip()[:10], "%Y-%m-%d")
+            d2 = datetime.strptime(checkout.strip()[:10], "%Y-%m-%d")
+            diff = (d2 - d1).days
+            if diff > 0:
+                nights = diff
         except Exception:
-            nights = 1
+            nights = 2
+    elif checkin:
+        nights = 2
+
+    guests_count = max(1, int(guests or 1))
 
     results = []
     for h in MOCK_HOTELS:
-        if dest_lower in h["destination"].lower() or h["destination"].lower() in dest_lower:
-            hotel = dict(h)
-            hotel["nights"] = nights
-            hotel["total_price"] = hotel["price_per_night"] * nights
-            hotel["guests"] = guests
-            hotel["is_demo"] = True
-            results.append(hotel)
+        h_dest = h.get("destination", "").lower()
+        if dest_lower in h_dest or h_dest in dest_lower:
+            results.append(_format_hotel_record(h, nights, guests_count))
 
     if not results and destination:
         base_rate = 3500
-        results.append({
-            "id": "HT-FALLBACK",
-            "name": f"Grand {destination.title()} Heritage Inn",
-            "destination": destination,
-            "address": f"Central Road, {destination.title()}",
+        fallback_hotel = {
+            "id": f"HT-{destination[:3].upper()}-FALLBACK",
+            "name": f"Grand {destination.title()} Heritage Inn & Suites",
+            "destination": destination.title(),
+            "address": f"Central Landmark Road, {destination.title()}",
             "rating": 4,
             "review_count": 850,
             "price_per_night": base_rate,
-            "nights": nights,
-            "total_price": base_rate * nights,
             "category": "Standard",
             "amenities": ["WiFi", "AC", "Restaurant", "Room Service", "Parking"],
-            "description": f"Comfortable hotel located centrally in {destination.title()}.",
+            "description": f"Comfortable hotel located centrally in {destination.title()} with contemporary amenities.",
             "cancellation": "Free cancellation before 24h",
             "breakfast": True,
             "room_types": ["Deluxe Room", "Executive Suite"],
-            "guests": guests,
-            "is_demo": True,
-        })
+        }
+        results.append(_format_hotel_record(fallback_hotel, nights, guests_count))
+
     return results
 
 
-def get_hotel_by_id(hotel_id: str):
+def get_hotel_by_id(hotel_id: str) -> Optional[dict]:
     for h in MOCK_HOTELS:
         if h["id"] == hotel_id:
-            return h
+            return _format_hotel_record(h, 2, 1)
     return None

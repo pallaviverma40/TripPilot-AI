@@ -53,10 +53,11 @@ export const TripProvider = ({ children }) => {
     
     let hotel = 0;
     if (selectedHotel) {
-      const start = new Date(searchParams.departureDate);
+      const start = new Date(searchParams.departureDate || new Date());
       const end = searchParams.returnDate ? new Date(searchParams.returnDate) : new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
-      const nights = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
-      hotel += selectedHotel.pricePerNight * nights;
+      const nights = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 2);
+      const nightly = Number(selectedHotel.pricePerNight ?? selectedHotel.price_per_night ?? selectedHotel.price ?? selectedHotel.nightly_price ?? 3500);
+      hotel += nightly * nights;
     }
 
     let activities = selectedActivities.reduce((acc, act) => acc + (act.price * searchParams.passengers), 0);

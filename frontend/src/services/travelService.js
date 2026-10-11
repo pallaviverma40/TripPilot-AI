@@ -97,19 +97,51 @@ export const busService = {
 // ── Hotels ───────────────────────────────────────────────────
 export const hotelService = {
   search: async (params) => {
+    const checkin = params.checkin || params.departureDate || new Date().toISOString().split('T')[0];
+    const checkout = params.checkout || params.returnDate || new Date(new Date(checkin).getTime() + 2 * 86400000).toISOString().split('T')[0];
+    const guests = Number(params.guests || params.passengers || 1);
+
+    const normalizeHotels = (list) => {
+      const start = new Date(checkin);
+      const end = new Date(checkout);
+      const nights = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 2);
+
+      return (Array.isArray(list) ? list : []).map(h => {
+        const nightly = Number(h.pricePerNight ?? h.price_per_night ?? h.price ?? h.nightly_price ?? 3500);
+        const total = Number(h.total_price ?? h.totalPrice ?? h.total_stay_price ?? (nightly * nights));
+        return {
+          ...h,
+          price: nightly,
+          pricePerNight: nightly,
+          price_per_night: nightly,
+          nightly_price: nightly,
+          total_price: total,
+          totalPrice: total,
+          total_stay_price: total,
+          nights: h.nights || nights,
+          guests: h.guests || guests,
+          is_demo: true,
+        };
+      });
+    };
+
     try {
       const res = await api.get('/api/hotels/search', {
         params: {
           destination: params.destination,
-          checkin: params.checkin || params.departureDate,
-          checkout: params.checkout || params.returnDate,
-          guests: params.guests || params.passengers || 1,
+          checkin,
+          checkout,
+          guests,
         }
       });
-      return res.hotels || res || [];
+      const rawList = res.hotels || (Array.isArray(res) ? res : []);
+      if (rawList && rawList.length > 0) {
+        return normalizeHotels(rawList);
+      }
+      return normalizeHotels(mockSearchHotels(params.destination, checkin, checkout, guests));
     } catch {
       await delay(800);
-      return mockSearchHotels(params.destination, params.checkin, params.checkout, params.guests);
+      return normalizeHotels(mockSearchHotels(params.destination, checkin, checkout, guests));
     }
   },
   book: async (bookingData) => {
